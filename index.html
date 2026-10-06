@@ -1,852 +1,1338 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>My_Hanguel Super App Vision Demo - Version 2</title>
-  <style>
-    :root {
-      --ink: #172033;
-      --muted: #667085;
-      --blue: #0b2f5b;
-      --cyan: #0fb7b2;
-      --gold: #d7a23a;
-      --paper: #fbfaf6;
-      --mist: #eef6f6;
-      --line: #d9e1e8;
-      --white: #ffffff;
-      --danger: #c84b4b;
-      --ok: #16806f;
-      --shadow: 0 24px 70px rgba(21, 42, 68, .13);
-      --radius: 7px;
-      font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
-    }
-
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background:
-        linear-gradient(180deg, rgba(251,250,246,.96), rgba(238,246,246,.88)),
-        url("https://images.unsplash.com/photo-1548115184-bc6544d06a58?auto=format&fit=crop&w=1900&q=80") center top / cover fixed;
-      min-height: 100vh;
-      letter-spacing: 0;
-    }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-
-    .app {
-      min-height: 100vh;
-      display: grid;
-      grid-template-rows: auto 1fr;
-    }
-
-    .top {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      min-height: 76px;
-      padding: 14px clamp(18px, 4vw, 54px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      background: rgba(251, 250, 246, .88);
-      border-bottom: 1px solid rgba(217,225,232,.8);
-      backdrop-filter: blur(18px);
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-    .logo {
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
-      object-fit: contain;
-      background: #fff;
-      border: 1px solid rgba(11,47,91,.16);
-      box-shadow: 0 10px 26px rgba(15,183,178,.18);
-      padding: 4px;
-    }
-    .wordmark {
-      line-height: 1.05;
-      font-weight: 900;
-      color: var(--blue);
-      font-size: 18px;
-    }
-    .wordmark span {
-      display: block;
-      font-weight: 700;
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 4px;
-    }
-    .topnav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .tab {
-      border: 1px solid transparent;
-      background: transparent;
-      color: #344054;
-      min-height: 38px;
-      padding: 0 12px;
-      border-radius: 999px;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-    .tab:hover, .tab.active {
-      color: var(--blue);
-      background: var(--white);
-      border-color: var(--line);
-      box-shadow: 0 8px 22px rgba(21,42,68,.08);
-    }
-    .cta {
-      border: 0;
-      min-height: 42px;
-      border-radius: 999px;
-      padding: 0 16px;
-      font-weight: 900;
-      color: #1f1705;
-      background: var(--gold);
-      box-shadow: 0 12px 28px rgba(215,162,58,.3);
-      white-space: nowrap;
-    }
-
-    .stage {
-      display: grid;
-      grid-template-columns: 280px minmax(0, 1fr);
-      gap: 24px;
-      padding: 24px clamp(18px, 4vw, 54px) 46px;
-      max-width: 1480px;
-      width: 100%;
-      margin: 0 auto;
-    }
-    .journey {
-      position: sticky;
-      top: 100px;
-      align-self: start;
-      background: rgba(255,255,255,.78);
-      border: 1px solid rgba(217,225,232,.82);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-    }
-    .journey h2 {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 27px;
-      line-height: 1.05;
-      margin: 0 0 10px;
-      color: var(--blue);
-      letter-spacing: 0;
-    }
-    .journey-logo {
-      width: 118px;
-      height: auto;
-      margin: 0 0 14px;
-      border-radius: 7px;
-      background: #fff;
-      border: 1px solid var(--line);
-      padding: 8px;
-    }
-    .journey p {
-      color: var(--muted);
-      line-height: 1.45;
-      margin: 0 0 16px;
-      font-size: 14px;
-    }
-    .milestones {
-      display: grid;
-      gap: 10px;
-      margin-top: 18px;
-    }
-    .milestone {
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      gap: 10px;
-      align-items: center;
-      padding: 9px;
-      border-radius: var(--radius);
-      background: #fff;
-      border: 1px solid var(--line);
-    }
-    .num {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: var(--mist);
-      color: var(--blue);
-      font-weight: 900;
-    }
-    .milestone strong { display: block; color: var(--blue); font-size: 14px; }
-    .milestone span { color: var(--muted); font-size: 12px; }
-
-    .screen {
-      display: none;
-      animation: lift .28s ease both;
-    }
-    .screen.active { display: block; }
-    @keyframes lift {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .hero {
-      min-height: calc(100vh - 124px);
-      display: grid;
-      align-content: center;
-      gap: 24px;
-      padding: clamp(20px, 4vw, 44px);
-      background:
-        linear-gradient(90deg, rgba(11,47,91,.94), rgba(11,47,91,.68) 46%, rgba(11,47,91,.12)),
-        url("https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=1800&q=80") center / cover;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      color: #fff;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: auto 0 0;
-      height: 118px;
-      background: linear-gradient(0deg, rgba(11,47,91,.72), transparent);
-      pointer-events: none;
-    }
-    .hero-content {
-      max-width: 810px;
-      position: relative;
-      z-index: 2;
-    }
-    .kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 30px;
-      padding: 0 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.14);
-      border: 1px solid rgba(255,255,255,.22);
-      color: #eaf7f6;
-      font-weight: 900;
-      font-size: 13px;
-      margin-bottom: 18px;
-    }
-    h1, .title {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(44px, 7vw, 92px);
-      line-height: .94;
-      letter-spacing: 0;
-      margin: 0;
-    }
-    .hero p {
-      max-width: 680px;
-      color: #edf6ff;
-      line-height: 1.58;
-      font-size: clamp(17px, 2vw, 22px);
-      margin: 22px 0 28px;
-    }
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .ghost, .soft, .primary {
-      border: 0;
-      min-height: 42px;
-      border-radius: 999px;
-      padding: 0 15px;
-      font-weight: 900;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-    .primary { background: var(--gold); color: #1f1705; }
-    .ghost { background: #fff; color: var(--blue); border: 1px solid var(--line); }
-    .soft { background: var(--mist); color: #075d61; }
-
-    .hero-metrics {
-      position: absolute;
-      z-index: 3;
-      left: clamp(20px, 4vw, 44px);
-      right: clamp(20px, 4vw, 44px);
-      bottom: 20px;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap: 10px;
-    }
-    .metric {
-      min-height: 86px;
-      padding: 14px;
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.92);
-      color: var(--blue);
-      border: 1px solid rgba(255,255,255,.42);
-    }
-    .metric strong { display: block; font-size: 24px; }
-    .metric span { color: var(--muted); font-size: 13px; font-weight: 800; }
-
-    .pagehead {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-    .pagehead h2 {
-      font-family: Georgia, "Times New Roman", serif;
-      color: var(--blue);
-      font-size: clamp(32px, 4vw, 54px);
-      line-height: 1;
-      margin: 0;
-      letter-spacing: 0;
-    }
-    .pagehead p {
-      color: var(--muted);
-      max-width: 760px;
-      line-height: 1.55;
-      margin: 10px 0 0;
-    }
-
-    .grid { display: grid; gap: 16px; }
-    .cols2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .cols3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .cols4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .panel {
-      background: rgba(255,255,255,.88);
-      border: 1px solid rgba(217,225,232,.88);
-      border-radius: var(--radius);
-      box-shadow: 0 14px 40px rgba(21,42,68,.08);
-      backdrop-filter: blur(12px);
-      padding: 18px;
-    }
-    .panel h3 {
-      margin: 0 0 7px;
-      color: var(--blue);
-      font-size: 18px;
-    }
-    .panel p, .card p { margin: 0; color: var(--muted); line-height: 1.48; font-size: 14px; }
-    .card {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 18px;
-      min-height: 172px;
-      display: grid;
-      gap: 14px;
-      align-content: space-between;
-    }
-    .card h3 { color: var(--blue); margin: 7px 0 6px; font-size: 19px; }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      min-height: 26px;
-      padding: 0 10px;
-      border-radius: 999px;
-      background: #eef3f8;
-      color: var(--blue);
-      font-size: 12px;
-      font-weight: 900;
-    }
-    .badge.gold { background: #fff4d8; color: #7d560c; }
-    .badge.cyan { background: #def8f6; color: #075d61; }
-    .badge.red { background: #fff0f0; color: var(--danger); }
-
-    .command {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(280px, .8fr);
-      gap: 16px;
-    }
-    .status-line {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 12px;
-      padding: 13px 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .status-line:last-child { border-bottom: 0; }
-    .pin {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--cyan);
-      box-shadow: 0 0 0 5px #def8f6;
-    }
-    .status-line strong { color: var(--blue); display: block; }
-    .status-line span { color: var(--muted); font-size: 13px; }
-
-    .progress {
-      height: 9px;
-      border-radius: 999px;
-      background: #e7edf2;
-      overflow: hidden;
-      margin-top: 12px;
-    }
-    .bar {
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--cyan), var(--gold));
-    }
-    .track {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-      margin-top: 16px;
-    }
-    .track div {
-      min-height: 86px;
-      border: 1px solid var(--line);
-      background: #fff;
-      border-radius: var(--radius);
-      padding: 12px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 900;
-      display: grid;
-      align-content: space-between;
-    }
-    .track .done { background: #def8f6; color: #075d61; border-color: #b5ebe7; }
-    .track .now { background: #fff4d8; color: #7d560c; border-color: #f2d89c; }
-    .track strong { font-size: 14px; color: inherit; }
-
-    .feature-band {
-      min-height: 230px;
-      border-radius: var(--radius);
-      padding: 26px;
-      color: #fff;
-      background:
-        linear-gradient(90deg, rgba(11,47,91,.88), rgba(11,47,91,.3)),
-        url("https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=1500&q=80") center / cover;
-      box-shadow: var(--shadow);
-      display: grid;
-      align-content: end;
-      margin-bottom: 16px;
-    }
-    .match-center {
-      display: grid;
-      grid-template-columns: minmax(260px, .8fr) minmax(0, 1.4fr);
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .profile-card {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 18px;
-      display: grid;
-      gap: 14px;
-    }
-    .profile-row {
-      display: grid;
-      grid-template-columns: 92px 1fr;
-      gap: 10px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--line);
-      font-size: 14px;
-    }
-    .profile-row:last-child { border-bottom: 0; padding-bottom: 0; }
-    .profile-row span { color: var(--muted); font-weight: 800; }
-    .profile-row strong { color: var(--blue); }
-    .match-list {
-      display: grid;
-      gap: 12px;
-    }
-    .match-card {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 16px;
-      display: grid;
-      grid-template-columns: 86px minmax(0, 1fr) auto;
-      gap: 14px;
-      align-items: center;
-    }
-    .score-ring {
-      width: 76px;
-      height: 76px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background:
-        radial-gradient(circle at center, #fff 0 55%, transparent 56%),
-        conic-gradient(var(--cyan) var(--score), #e7edf2 0);
-      color: var(--blue);
-      font-size: 19px;
-      font-weight: 900;
-      border: 1px solid var(--line);
-    }
-    .match-card h3 { margin: 0 0 6px; color: var(--blue); }
-    .match-reasons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 10px;
-    }
-    .reason {
-      border-radius: 999px;
-      background: var(--mist);
-      color: #075d61;
-      min-height: 24px;
-      padding: 0 9px;
-      display: inline-flex;
-      align-items: center;
-      font-size: 12px;
-      font-weight: 900;
-    }
-    .feature-band h3 {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(28px, 4vw, 44px);
-      margin: 0 0 8px;
-    }
-    .feature-band p { color: #edf6ff; max-width: 780px; }
-
-    table { width: 100%; border-collapse: collapse; font-size: 14px; }
-    th, td { text-align: left; padding: 13px 10px; border-bottom: 1px solid var(--line); }
-    th { color: var(--muted); text-transform: uppercase; font-size: 11px; letter-spacing: .08em; }
-    tr:last-child td { border-bottom: 0; }
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-    label { display: grid; gap: 7px; font-weight: 900; color: var(--blue); font-size: 13px; }
-    input {
-      min-height: 44px;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      padding: 10px 12px;
-      color: var(--ink);
-      background: #fff;
-      outline: none;
-    }
-    input:focus { border-color: var(--cyan); box-shadow: 0 0 0 4px rgba(15,183,178,.13); }
-
-    @media (max-width: 1120px) {
-      .stage { grid-template-columns: 1fr; }
-      .journey { position: static; }
-      .milestones { grid-template-columns: repeat(5, minmax(150px, 1fr)); overflow: auto; }
-      .cols4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .track { grid-template-columns: repeat(4, 1fr); }
-      .match-center { grid-template-columns: 1fr; }
-      .match-card { grid-template-columns: 76px minmax(0, 1fr); }
-      .match-card button { grid-column: 2; justify-self: start; }
-    }
-    @media (max-width: 760px) {
-      .top { align-items: flex-start; }
-      .topnav { justify-content: flex-start; overflow: auto; flex-wrap: nowrap; max-width: 100%; }
-      .cta { display: none; }
-      .stage { padding: 16px; }
-      .hero { min-height: 760px; padding-bottom: 260px; }
-      .hero-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .cols2, .cols3, .cols4, .command, .profile-grid { grid-template-columns: 1fr; }
-      .match-card { grid-template-columns: 1fr; }
-      .match-card button { grid-column: auto; justify-self: start; }
-      .track { grid-template-columns: 1fr; }
-      .pagehead { display: grid; }
-      .milestones { grid-template-columns: 1fr; overflow: visible; }
-      th:nth-child(3), td:nth-child(3) { display: none; }
-    }
-  </style>
-</head>
-<body>
-  <div class="app">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="My_Hanguel — your AI gateway to study and life in Korea. Explore a student journey prototype with profile matching and guided applications.">
+    <meta name="theme-color" content="#0b2f5b">
+    <title>
+      My_Hanguel | Study and Life in Korea
+    </title>
+    <link rel="stylesheet" href="assets/styles.css">
+    <script src="assets/app.js" defer>
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">
+      Skip to main content
+    </a>
     <header class="top">
-      <div class="brand">
-        <img class="logo" src="my-hanguel-logo.png" alt="My Hanguel logo">
-        <div class="wordmark">My_Hanguel <span>Super App for Korea journeys</span></div>
-      </div>
-      <nav class="topnav" id="tabs"></nav>
-      <button class="cta" data-go="profile">Complete profile</button>
+      <a class="brand" href="#home" aria-label="My Hanguel landing page">
+        <span class="brand-mark" aria-hidden="true">
+          M
+          <span>
+            H
+          </span>
+        </span>
+        <span class="wordmark">
+          My_Hanguel
+          <span>
+            Study. Arrive. Belong.
+          </span>
+        </span>
+      </a>
+      <nav class="public-nav" aria-label="Public navigation">
+        <a href="#opportunities">
+          Explore opportunities
+        </a>
+        <a class="primary" href="#profile">
+          Build My Profile
+          <span aria-hidden="true">
+            →
+          </span>
+        </a>
+      </nav>
+      <a class="workspace-home" href="#home">
+        About My_Hanguel
+        <span aria-hidden="true">
+          →
+        </span>
+      </a>
     </header>
-
-    <main class="stage">
-      <aside class="journey">
-        <img class="journey-logo" src="my-hanguel-logo.png" alt="My Hanguel logo">
-        <h2>One profile. A complete Korea journey.</h2>
-        <p>A warmer, more premium vision demo built around the student journey instead of a traditional portal sidebar.</p>
-        <button class="primary" data-go="home">Open dashboard</button>
-        <div class="milestones">
-          <div class="milestone"><span class="num">1</span><div><strong>Dream</strong><span>Discover Korea opportunities</span></div></div>
-          <div class="milestone"><span class="num">2</span><div><strong>Apply</strong><span>Scholarships and admission</span></div></div>
-          <div class="milestone"><span class="num">3</span><div><strong>Prepare</strong><span>Language, exams, visa</span></div></div>
-          <div class="milestone"><span class="num">4</span><div><strong>Arrive</strong><span>Housing, ARC, banking</span></div></div>
-          <div class="milestone"><span class="num">5</span><div><strong>Grow</strong><span>Community and career</span></div></div>
+    <div class="prototype-note">
+      <span class="demo-dot" aria-hidden="true">
+      </span>
+      <strong>
+        Interactive prototype
+      </strong>
+      <span>
+        Sample opportunities and cases. No live AI, submissions, payments, or university integrations.
+      </span>
+    </div>
+    <div class="workspace-shell">
+      <aside class="workspace-sidebar">
+        <p class="eyebrow">
+          Student workspace
+        </p>
+        <nav class="workspace-nav" aria-label="Student workspace">
+          <a href="#dashboard">
+            <span aria-hidden="true">
+              01
+            </span>
+            Dashboard
+          </a>
+          <a href="#profile">
+            <span aria-hidden="true">
+              02
+            </span>
+            My Profile
+          </a>
+          <a href="#opportunities">
+            <span aria-hidden="true">
+              03
+            </span>
+            Opportunities
+          </a>
+          <a href="#applications">
+            <span aria-hidden="true">
+              04
+            </span>
+            My Applications
+          </a>
+          <a href="#services">
+            <span aria-hidden="true">
+              05
+            </span>
+            Services
+          </a>
+          <a href="#mentor">
+            <span aria-hidden="true">
+              06
+            </span>
+            My Mentor
+          </a>
+        </nav>
+        <div class="sidebar-note">
+          <span class="badge cyan">
+            Your Korea journey
+          </span>
+          <p>
+            One step at a time, from your first profile to life in Korea.
+          </p>
+          <p class="small">
+            Sample workspace · no account required
+          </p>
         </div>
       </aside>
-
-      <section class="screen active" data-screen="home">
-        <div class="hero">
-          <div class="hero-content">
-            <span class="kicker">Finally, everything is in one place</span>
-            <h1>My_Hanguel Super App</h1>
-            <p>A trusted student success ecosystem that actively manages scholarship discovery, case tracking, language preparation, exam registration, Korea life, community, and career support.</p>
-            <div class="hero-actions">
-              <button class="primary" data-go="study">Explore opportunities</button>
-              <button class="ghost" data-go="cases">Track my cases</button>
+      <main id="main-content" tabindex="-1">
+        <section class="screen active landing" data-screen="home" aria-labelledby="home-title">
+          <div class="hero">
+            <div class="hero-content">
+              <span class="kicker">
+                My_Hanguel · A future in Korea starts here
+              </span>
+              <h1 id="home-title" tabindex="-1">
+                Your AI Gateway to Study and Life in Korea
+              </h1>
+              <p>
+                One profile. Personalized opportunities. Guided applications.
+                <br>
+                Everything you need for your journey to Korea in one place.
+              </p>
+              <div class="hero-actions">
+                <a class="primary" href="#profile">
+                  Build My Profile
+                  <span aria-hidden="true">
+                    →
+                  </span>
+                </a>
+                <a class="ghost" href="#opportunities">
+                  Explore Opportunities
+                </a>
+              </div>
+              <p class="hero-disclosure">
+                Explore the vision through an interactive demo. Matching scores are illustrative profile compatibility, not admission predictions.
+              </p>
+            </div>
+            <div class="journey-visual" aria-label="A connected journey from profile to life in Korea">
+              <span class="visual-label">
+                YOUR NEXT CHAPTER
+              </span>
+              <div class="destination">
+                대한민국
+                <span>
+                  South Korea
+                </span>
+              </div>
+              <div class="visual-steps">
+                <span>
+                  01 / Your profile
+                </span>
+                <span>
+                  02 / Your possibilities
+                </span>
+                <span>
+                  03 / Your next step
+                </span>
+              </div>
+              <div class="visual-footer">
+                A clearer path. A supported journey.
+              </div>
             </div>
           </div>
-          <div class="hero-metrics">
-            <div class="metric"><strong>78%</strong><span>Journey readiness</span></div>
-            <div class="metric"><strong>5</strong><span>Active cases</span></div>
-            <div class="metric"><strong>3</strong><span>AI recommendations</span></div>
-            <div class="metric"><strong>2</strong><span>Urgent tasks</span></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="screen" data-screen="dashboard">
-        <div class="pagehead">
-          <div><span class="badge cyan">Personal command center</span><h2>Good morning, Sara.</h2><p>Your advisor has moved your scholarship case into document review. Two actions will unblock the next stage.</p></div>
-          <button class="primary" data-go="cases">Open active cases</button>
-        </div>
-        <div class="command">
-          <div class="panel">
-            <h3>Today’s priority queue</h3>
-            <div class="status-line"><span class="pin"></span><div><strong>Upload passport scan</strong><span>Required for GKS and visa pathways.</span></div><span class="badge red">Due soon</span></div>
-            <div class="status-line"><span class="pin"></span><div><strong>Confirm TOPIK registration payment</strong><span>Finance team can finish registration after receipt review.</span></div><span class="badge gold">Waiting</span></div>
-            <div class="status-line"><span class="pin"></span><div><strong>Review AI scholarship shortlist</strong><span>Three opportunities match above 84%.</span></div><span class="badge cyan">Ready</span></div>
-          </div>
-          <aside class="panel">
-            <h3>Advisor note</h3>
-            <p>“Sara, your academic profile is strong for AI education programs. Please complete the passport upload so we can start final scholarship packaging.”</p>
-            <div class="progress"><div class="bar" style="width:78%"></div></div>
-            <p style="margin-top:12px"><strong>Assigned advisor:</strong> Mina Park</p>
-          </aside>
-        </div>
-        <div class="grid cols4" style="margin-top:16px">
-          <div class="panel"><span class="badge cyan">Profile</span><h3>78% complete</h3><p>Academic profile, scores, preferences, and history power recommendations.</p></div>
-          <div class="panel"><span class="badge gold">Deadline</span><h3>Jun 21</h3><p>Nearest required action: passport scan for document review.</p></div>
-          <div class="panel"><span class="badge">Cases</span><h3>5 active</h3><p>Scholarship, TOPIK, IELTS payment, visa, and language enrollment.</p></div>
-          <div class="panel"><span class="badge cyan">Community</span><h3>2 groups</h3><p>Research writing and TOPIK study group are recommended.</p></div>
-        </div>
-      </section>
-
-      <section class="screen" data-screen="study">
-        <div class="pagehead">
-          <div><span class="badge cyan">Study in Korea</span><h2>Scholarship match based on each student profile.</h2><p>The system reads each person’s nationality, academic level, major, GPA, language scores, research interests, and documents to recommend scholarships and explain why they match.</p></div>
-          <button class="ghost" data-go="profile">Tune profile</button>
-        </div>
-        <div class="feature-band"><h3>Scholarship intelligence</h3><p>Matching uses country, academic level, major, GPA, language scores, and research interests to recommend the right opportunities.</p></div>
-        <div class="match-center">
-          <aside class="profile-card">
-            <span class="badge cyan">Current profile: Sara Ahmadi</span>
-            <div class="profile-row"><span>Country</span><strong>Iran</strong></div>
-            <div class="profile-row"><span>Level</span><strong>Master’s target</strong></div>
-            <div class="profile-row"><span>Major</span><strong>Computer Engineering</strong></div>
-            <div class="profile-row"><span>GPA</span><strong>3.72 / 4.0</strong></div>
-            <div class="profile-row"><span>Scores</span><strong>TOPIK 3, IELTS 6.5</strong></div>
-            <div class="profile-row"><span>Interest</span><strong>AI in education</strong></div>
-          </aside>
-          <div class="match-list">
-            <article class="match-card">
-              <div class="score-ring" style="--score:94%">94%</div>
-              <div>
-                <span class="badge cyan">Best match</span>
-                <h3>GKS Graduate Scholarship</h3>
-                <p>Strong nationality fit, excellent GPA, graduate target, and broad eligibility for Korean government funding.</p>
-                <div class="match-reasons">
-                  <span class="reason">Iran eligible</span>
-                  <span class="reason">GPA strong</span>
-                  <span class="reason">Master’s fit</span>
-                  <span class="reason">2 documents missing</span>
-                </div>
+          <section class="landing-block" aria-labelledby="value-title">
+            <div class="section-heading">
+              <span class="eyebrow">
+                Less searching. More moving forward.
+              </span>
+              <h2 id="value-title">
+                Your journey deserves a clearer path.
+              </h2>
+            </div>
+            <div class="value-layout">
+              <div class="panel friction">
+                <h3>
+                  Planning alone can feel scattered.
+                </h3>
+                <ul>
+                  <li>
+                    Information spread across multiple websites
+                  </li>
+                  <li>
+                    Complicated applications and repeated documents
+                  </li>
+                  <li>
+                    Unclear progress and uncertain next steps
+                  </li>
+                </ul>
               </div>
-              <button class="primary" data-go="cases">Create case</button>
-            </article>
-            <article class="match-card">
-              <div class="score-ring" style="--score:88%">88%</div>
-              <div>
-                <span class="badge cyan">Research fit</span>
-                <h3>KAIST Global IT Track</h3>
-                <p>Good match for computer engineering, AI research interests, and English-supported graduate pathways.</p>
-                <div class="match-reasons">
-                  <span class="reason">STEM major</span>
-                  <span class="reason">IELTS ready</span>
-                  <span class="reason">Research profile</span>
-                  <span class="reason">Plan needed</span>
-                </div>
+              <div class="value-benefits">
+                <article class="panel">
+                  <span class="badge cyan">
+                    01
+                  </span>
+                  <h3>
+                    One Profile
+                  </h3>
+                  <p>
+                    Your background and study goals in one place.
+                  </p>
+                </article>
+                <article class="panel">
+                  <span class="badge cyan">
+                    02
+                  </span>
+                  <h3>
+                    AI Matching
+                  </h3>
+                  <p>
+                    A vision for opportunities that fit, with reasons you can understand.
+                  </p>
+                </article>
+                <article class="panel">
+                  <span class="badge cyan">
+                    03
+                  </span>
+                  <h3>
+                    Guided Applications
+                  </h3>
+                  <p>
+                    Know what to prepare and what comes next.
+                  </p>
+                </article>
+                <article class="panel">
+                  <span class="badge cyan">
+                    04
+                  </span>
+                  <h3>
+                    Digital Case Tracking
+                  </h3>
+                  <p>
+                    Documents, tasks, and progress in one view.
+                  </p>
+                </article>
+                <article class="panel">
+                  <span class="badge cyan">
+                    05
+                  </span>
+                  <h3>
+                    Mentor Support
+                  </h3>
+                  <p>
+                    A human perspective along the way.
+                  </p>
+                </article>
               </div>
-              <button class="soft">Save match</button>
-            </article>
-            <article class="match-card">
-              <div class="score-ring" style="--score:81%">81%</div>
+            </div>
+          </section>
+          <section class="landing-block journey-block" aria-labelledby="journey-title">
+            <div class="section-heading">
+              <span class="eyebrow">
+                How it works
+              </span>
+              <h2 id="journey-title">
+                One journey. Six connected steps.
+              </h2>
+            </div>
+            <ol class="journey-steps">
+              <li>
+                <span>
+                  01
+                </span>
+                <h3>
+                  Profile
+                </h3>
+                <p>
+                  Tell your story
+                </p>
+              </li>
+              <li>
+                <span>
+                  02
+                </span>
+                <h3>
+                  Match
+                </h3>
+                <p>
+                  Find your fit
+                </p>
+              </li>
+              <li>
+                <span>
+                  03
+                </span>
+                <h3>
+                  Apply
+                </h3>
+                <p>
+                  Prepare your next step
+                </p>
+              </li>
+              <li>
+                <span>
+                  04
+                </span>
+                <h3>
+                  Track
+                </h3>
+                <p>
+                  See your progress
+                </p>
+              </li>
+              <li>
+                <span>
+                  05
+                </span>
+                <h3>
+                  Arrive
+                </h3>
+                <p>
+                  Plan your landing
+                </p>
+              </li>
+              <li>
+                <span>
+                  06
+                </span>
+                <h3>
+                  Live
+                </h3>
+                <p>
+                  Build a life in Korea
+                </p>
+              </li>
+            </ol>
+          </section>
+          <section class="landing-block" aria-labelledby="matching-preview-title">
+            <div class="section-heading heading-row">
               <div>
-                <span class="badge gold">Opportunity</span>
-                <h3>Seoul Tech Graduate Support</h3>
-                <p>Partial funding with a practical career pathway; stronger if TOPIK improves to level 4.</p>
-                <div class="match-reasons">
-                  <span class="reason">Major aligned</span>
-                  <span class="reason">Career fit</span>
-                  <span class="reason">TOPIK boost advised</span>
-                </div>
+                <span class="eyebrow">
+                  AI matching · concept preview
+                </span>
+                <h2 id="matching-preview-title">
+                  See the fit. Understand the why.
+                </h2>
+                <p>
+                  Illustrative opportunities for a sample graduate student. These are not verified scholarship listings.
+                </p>
               </div>
-              <button class="soft">Request advice</button>
+              <a class="ghost" href="#opportunities">
+                Explore all demo matches
+              </a>
+            </div>
+            <div class="grid cols3" data-opportunity-list="preview">
+            </div>
+            <p class="small score-disclosure">
+              Profile match measures illustrative compatibility. It is not the probability of admission or funding.
+            </p>
+          </section>
+          <section class="landing-block" aria-labelledby="tracking-preview-title">
+            <div class="section-heading">
+              <span class="eyebrow">
+                Application tracking · concept preview
+              </span>
+              <h2 id="tracking-preview-title">
+                Always know your next step.
+              </h2>
+              <p>
+                A sample case brings documents, tasks, deadlines, mentor feedback, and application status together.
+              </p>
+            </div>
+            <div class="panel">
+              <div class="heading-row">
+                <div>
+                  <span class="badge gold">
+                    Demo · Preparing documents
+                  </span>
+                  <h3>
+                    Graduate scholarship application
+                  </h3>
+                </div>
+                <a class="ghost" href="#applications">
+                  Explore the sample tracker
+                </a>
+              </div>
+              <ol class="track">
+                <li class="done">
+                  <strong>
+                    Profile
+                  </strong>
+                  <span>
+                    Complete
+                  </span>
+                </li>
+                <li class="done">
+                  <strong>
+                    Match
+                  </strong>
+                  <span>
+                    Selected
+                  </span>
+                </li>
+                <li class="now">
+                  <strong>
+                    Documents
+                  </strong>
+                  <span>
+                    In progress
+                  </span>
+                </li>
+                <li>
+                  <strong>
+                    Review
+                  </strong>
+                  <span>
+                    Not started
+                  </span>
+                </li>
+                <li>
+                  <strong>
+                    Submission
+                  </strong>
+                  <span>
+                    Not started
+                  </span>
+                </li>
+                <li>
+                  <strong>
+                    Result
+                  </strong>
+                  <span>
+                    Not started
+                  </span>
+                </li>
+              </ol>
+              <div class="preview-details">
+                <p>
+                  <strong>
+                    Documents
+                  </strong>
+                  <span>
+                    2 ready · 2 to prepare
+                  </span>
+                </p>
+                <p>
+                  <strong>
+                    Next action
+                  </strong>
+                  <span>
+                    Prepare a sample study plan
+                  </span>
+                </p>
+                <p>
+                  <strong>
+                    Demo deadline
+                  </strong>
+                  <span>
+                    14 days remaining · illustrative
+                  </span>
+                </p>
+                <p>
+                  <strong>
+                    Mentor feedback
+                  </strong>
+                  <span>
+                    Connect your goals to the program
+                  </span>
+                </p>
+              </div>
+            </div>
+          </section>
+          <section class="final-cta">
+            <span class="eyebrow">
+              Your next chapter
+            </span>
+            <h2>
+              Ready to start your journey to Korea?
+            </h2>
+            <p>
+              Start with your story. Explore what could come next.
+            </p>
+            <a class="primary" href="#profile">
+              Build My Profile
+              <span aria-hidden="true">
+                →
+              </span>
+            </a>
+          </section>
+        </section>
+        <section class="screen" data-screen="dashboard" aria-labelledby="dashboard-title" hidden>
+          <div class="pagehead">
+            <div>
+              <span class="badge cyan">
+                Sample student workspace
+              </span>
+              <h1 id="dashboard-title" tabindex="-1">
+                Your next step, made clear.
+              </h1>
+              <p>
+                Welcome to Sara’s illustrative Korea journey. Explore the workspace without creating an account.
+              </p>
+            </div>
+            <a class="ghost" href="#profile">
+              Review My Profile
+            </a>
+          </div>
+          <div class="next-action panel">
+            <div>
+              <span class="eyebrow">
+                Start here
+              </span>
+              <h2>
+                Prepare your study plan.
+              </h2>
+              <p>
+                Your sample application is preparing documents. A study plan and passport copy are still outstanding.
+              </p>
+            </div>
+            <a class="primary" href="#applications">
+              View documents & next actions
+            </a>
+          </div>
+          <div class="grid cols3 dashboard-stats">
+            <article class="panel">
+              <span class="badge cyan">
+                Journey
+              </span>
+              <h2>
+                Apply
+              </h2>
+              <p>
+                Profile → Match →
+                <strong>
+                  Apply
+                </strong>
+                → Track → Arrive → Live
+              </p>
+            </article>
+            <article class="panel">
+              <span class="badge gold">
+                Demo deadline
+              </span>
+              <h2>
+                14 days remaining
+              </h2>
+              <p>
+                Illustrative preparation window, not an official scholarship deadline.
+              </p>
+            </article>
+            <article class="panel">
+              <span class="badge">
+                Applications
+              </span>
+              <h2>
+                1 sample case
+              </h2>
+              <p>
+                Preparing documents · no application has been submitted.
+              </p>
             </article>
           </div>
-        </div>
-        <div class="grid cols3">
-          <article class="card"><div><span class="badge cyan">94% match</span><h3>GKS Graduate Scholarship</h3><p>Full funding pathway with advisor-managed document preparation.</p></div><button class="primary" data-go="cases">Start case</button></article>
-          <article class="card"><div><span class="badge cyan">89% match</span><h3>KAIST Global IT Track</h3><p>Strong fit for AI education and research-focused applicants.</p></div><button class="soft">Save</button></article>
-          <article class="card"><div><span class="badge gold">Career outlook</span><h3>Computer Engineering in Korea</h3><p>Major guide with universities, job market, language expectations, and scholarship availability.</p></div><button class="soft">Open guide</button></article>
-        </div>
-      </section>
-
-      <section class="screen" data-screen="learn">
-        <div class="pagehead">
-          <div><span class="badge cyan">Learn Korean</span><h2>Language preparation that connects to real cases.</h2><p>Korean classes, TOPIK preparation, writing courses, mock exams, and resources become trackable student services.</p></div>
-          <button class="primary" data-go="exams">Register for TOPIK</button>
-        </div>
-        <div class="grid cols3">
-          <article class="card"><div><span class="badge">Course</span><h3>Korean Intermediate B1</h3><p>10 weeks, evening cohort, teacher feedback, portfolio tasks.</p></div><button class="soft">Enroll</button></article>
-          <article class="card"><div><span class="badge gold">TOPIK</span><h3>Writing Clinic</h3><p>Small group writing feedback for TOPIK II essays and mock exam review.</p></div><button class="soft">Join</button></article>
-          <article class="card"><div><span class="badge cyan">Resources</span><h3>Study Library</h3><p>Advisor-selected materials based on the user’s current level and target score.</p></div><button class="soft">Browse</button></article>
-        </div>
-      </section>
-
-      <section class="screen" data-screen="exams">
-        <div class="pagehead">
-          <div><span class="badge gold">Exams & Certifications</span><h2>Centralized exam ecosystem.</h2><p>TOPIK registration, IELTS registration, mock exams, TTC programs, and test preparation services are organized as cases.</p></div>
-        </div>
-        <div class="panel">
-          <table>
-            <thead><tr><th>Service</th><th>Date</th><th>Status</th><th>Next action</th></tr></thead>
-            <tbody>
-              <tr><td>TOPIK II Registration</td><td>Sep 14, 2026</td><td><span class="badge cyan">Payment confirmed</span></td><td>Upload confirmation document</td></tr>
-              <tr><td>Mock TOPIK Exam</td><td>Aug 9, 2026</td><td><span class="badge">Open</span></td><td>Reserve seat</td></tr>
-              <tr><td>IELTS Payment</td><td>Flexible</td><td><span class="badge red">Receipt needed</span></td><td>Upload user payment receipt</td></tr>
-              <tr><td>TTC Program</td><td>Oct 2026</td><td><span class="badge gold">Recommended</span></td><td>Request consultation</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="screen" data-screen="community">
-        <div class="pagehead">
-          <div><span class="badge cyan">Community</span><h2>Belonging, mentoring, and academic momentum.</h2><p>Research writing groups, study groups, major-based communities, university communities, and events help users keep moving.</p></div>
-        </div>
-        <div class="grid cols3">
-          <article class="card"><div><span class="badge cyan">Group</span><h3>Research Writing Circle</h3><p>Weekly structure for SOP, CV, article writing, and professor outreach.</p></div><button class="soft">Join group</button></article>
-          <article class="card"><div><span class="badge">Study</span><h3>TOPIK Study Room</h3><p>Peer accountability, mentor notes, mock test announcements, files, and tasks.</p></div><button class="soft">Open</button></article>
-          <article class="card"><div><span class="badge gold">Event</span><h3>Scholarship Workshop</h3><p>Live guidance session for applicants preparing 2027 Korea scholarship packages.</p></div><button class="primary">Register</button></article>
-        </div>
-      </section>
-
-      <section class="screen" data-screen="life">
-        <div class="pagehead">
-          <div><span class="badge cyan">Korea Life</span><h2>Support before and after arrival.</h2><p>Visa support, housing, arrival preparation, insurance, ARC, banking, SIM, and orientation become part of the same journey.</p></div>
-        </div>
-        <div class="grid cols3">
-          <article class="card"><div><span class="badge gold">Visa</span><h3>D-2 Visa Support</h3><p>Document checklist, embassy timeline, advisor notes, and application status.</p></div><button class="soft">Create case</button></article>
-          <article class="card"><div><span class="badge">Arrival</span><h3>Settlement Pack</h3><p>Airport pickup, SIM card, transportation card, and dormitory arrival guidance.</p></div><button class="soft">Plan arrival</button></article>
-          <article class="card"><div><span class="badge cyan">Life Admin</span><h3>ARC & Banking</h3><p>Step-by-step settlement guidance after landing in Korea.</p></div><button class="soft">View roadmap</button></article>
-        </div>
-      </section>
-
-      <section class="screen" data-screen="cases">
-        <div class="pagehead">
-          <div><span class="badge gold">My Cases</span><h2>Government-portal clarity for every service.</h2><p>Each active service has a status, advisor, timeline, required actions, documents, notes, and deadline.</p></div>
-          <button class="primary" data-go="dashboard">Back to dashboard</button>
-        </div>
-        <div class="panel">
-          <h3>Scholarship Application Case</h3>
-          <p>Reference GKS-2704. Current stage: Scholarship Matching. Advisor: Mina Park.</p>
-          <div class="track">
-            <div class="done"><strong>Profile</strong><span>Created</span></div>
-            <div class="done"><strong>Documents</strong><span>Submitted</span></div>
-            <div class="now"><strong>Review</strong><span>In progress</span></div>
-            <div><strong>Matching</strong><span>Next</span></div>
-            <div><strong>Preparation</strong><span>Pending</span></div>
-            <div><strong>Submitted</strong><span>Pending</span></div>
-            <div><strong>Result</strong><span>Pending</span></div>
+          <div class="grid cols2">
+            <section class="panel" aria-labelledby="priorities-title">
+              <h2 id="priorities-title">
+                Priority actions
+              </h2>
+              <ol class="priority-list">
+                <li>
+                  <div>
+                    <strong>
+                      Prepare a study plan
+                    </strong>
+                    <p>
+                      Explain your academic goals and Korea study interests.
+                    </p>
+                  </div>
+                  <a href="#applications">
+                    View checklist
+                  </a>
+                </li>
+                <li>
+                  <div>
+                    <strong>
+                      Review passport requirements
+                    </strong>
+                    <p>
+                      Do not upload personal documents in this demo.
+                    </p>
+                  </div>
+                  <a href="#services">
+                    Explore preparation support
+                  </a>
+                </li>
+                <li>
+                  <div>
+                    <strong>
+                      Discuss your application direction
+                    </strong>
+                    <p>
+                      A sample mentor note is waiting for you.
+                    </p>
+                  </div>
+                  <a href="#mentor">
+                    Read mentor guidance
+                  </a>
+                </li>
+              </ol>
+            </section>
+            <section class="panel" aria-labelledby="advisor-title">
+              <span class="badge cyan">
+                Mentor perspective
+              </span>
+              <h2 id="advisor-title">
+                You do not have to plan alone.
+              </h2>
+              <blockquote>
+                “Connect your study plan to your interests in AI and education. Start with your goals, then explain the preparation you need.”
+              </blockquote>
+              <p>
+                Mina Park · fictional demo mentor
+              </p>
+              <a class="ghost" href="#mentor">
+                Meet your demo mentor
+              </a>
+            </section>
           </div>
-        </div>
-        <div class="grid cols2" style="margin-top:16px">
-          <article class="card"><div><span class="badge cyan">Payment confirmed</span><h3>TOPIK Registration Case</h3><p>Registration center selected. Confirmation document pending.</p></div><button class="soft" data-go="exams">Open exam service</button></article>
-          <article class="card"><div><span class="badge red">Waiting for receipt</span><h3>IELTS Payment Case</h3><p>User payment receipt is needed before My_Hanguel can complete the international payment.</p></div><button class="soft">Upload receipt</button></article>
-          <article class="card"><div><span class="badge gold">Documents required</span><h3>Visa Application Case</h3><p>Visa path prepared for admission-stage users.</p></div><button class="soft" data-go="life">Open Korea Life</button></article>
-          <article class="card"><div><span class="badge">Enrolled</span><h3>Language Course Case</h3><p>Intermediate Korean class starts next month with weekly teacher feedback.</p></div><button class="soft" data-go="learn">Open course</button></article>
-        </div>
-      </section>
-
-      <section class="screen" data-screen="profile">
-        <div class="pagehead">
-          <div><span class="badge cyan">One profile</span><h2>The profile powers everything.</h2><p>Personal information, nationality, academics, language scores, documents, resume, and application history drive recommendations across the whole platform.</p></div>
-        </div>
-        <div class="command">
-          <div class="panel">
-            <h3>Core profile</h3>
-            <div class="profile-grid">
-              <label>Full name<input value="Sara Ahmadi"></label>
-              <label>Nationality<input value="Iranian"></label>
-              <label>Academic level<input value="Bachelor graduate"></label>
-              <label>Major<input value="Computer Engineering"></label>
-              <label>GPA<input value="3.72 / 4.0"></label>
-              <label>Language scores<input value="TOPIK 3, IELTS 6.5"></label>
+          <section class="workspace-section" aria-labelledby="recommended-title">
+            <div class="heading-row">
+              <div>
+                <h2 id="recommended-title">
+                  Recommended opportunities
+                </h2>
+                <p>
+                  3 demo matches · fixed examples, not calculated from your edits.
+                </p>
+              </div>
+              <a href="#opportunities">
+                View all opportunities
+              </a>
+            </div>
+            <div class="grid cols3" data-opportunity-list="dashboard">
+            </div>
+          </section>
+        </section>
+        <section class="screen" data-screen="profile" aria-labelledby="profile-title" hidden>
+          <div class="pagehead">
+            <div>
+              <span class="badge cyan">
+                01 / Profile
+              </span>
+              <h1 id="profile-title" tabindex="-1">
+                Your story starts here.
+              </h1>
+              <p>
+                Explore a structured student profile. Edits stay only in this open page; they are not saved and do not change demo matches.
+              </p>
+            </div>
+            <a class="ghost" href="#dashboard">
+              View sample dashboard
+            </a>
+          </div>
+          <div class="panel profile-intro">
+            <div>
+              <h2>
+                One profile. A clearer direction.
+              </h2>
+              <p>
+                Sample profile: Sara Ahmadi, a Computer Engineering graduate exploring a master’s in Korea.
+              </p>
+            </div>
+            <div>
+              <label for="sample-progress">
+                Sample profile completeness · 75%
+              </label>
+              <progress id="sample-progress" max="100" value="75">
+                75%
+              </progress>
+              <p class="small">
+                Fixed demo indicator, not calculated from these fields.
+              </p>
             </div>
           </div>
-          <aside class="panel">
-            <h3>Recommendation strength</h3>
-            <p>Your profile is strong enough for scholarship matching. Adding passport, professor interests, and resume will improve application readiness.</p>
-            <div class="progress"><div class="bar" style="width:78%"></div></div>
-            <div style="margin-top:14px"><span class="badge cyan">78% complete</span></div>
-          </aside>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <script>
-    const tabs = [
-      ["home", "Vision"],
-      ["dashboard", "Home"],
-      ["study", "Study in Korea"],
-      ["learn", "Learn Korean"],
-      ["exams", "Exams"],
-      ["community", "Community"],
-      ["life", "Korea Life"],
-      ["cases", "My Cases"]
-    ];
-
-    const tabHost = document.getElementById("tabs");
-    tabs.forEach(([screen, label]) => {
-      const btn = document.createElement("button");
-      btn.className = "tab";
-      btn.dataset.go = screen;
-      btn.textContent = label;
-      tabHost.appendChild(btn);
-    });
-
-    function show(screen) {
-      document.querySelectorAll(".screen").forEach(item => {
-        item.classList.toggle("active", item.dataset.screen === screen);
-      });
-      document.querySelectorAll("[data-go]").forEach(item => {
-        item.classList.toggle("active", item.dataset.go === screen);
-      });
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    document.addEventListener("click", event => {
-      const trigger = event.target.closest("[data-go]");
-      if (!trigger) return;
-      show(trigger.dataset.go);
-    });
-
-    show("home");
-  </script>
-</body>
+          <form id="profile-demo" class="profile-sections">
+            <fieldset class="panel">
+              <legend>
+                Personal
+              </legend>
+              <div class="profile-grid">
+                <label>
+                  Full name
+                  <input name="fullName" autocomplete="name" value="Sara Ahmadi" maxlength="100" required>
+                </label>
+                <label>
+                  Nationality
+                  <input name="nationality" value="Iranian" maxlength="100" required>
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="panel">
+              <legend>
+                Academic
+              </legend>
+              <div class="profile-grid">
+                <label>
+                  Current academic level
+                  <select name="academicLevel">
+                    <option>
+                      Bachelor graduate
+                    </option>
+                    <option>
+                      Undergraduate student
+                    </option>
+                    <option>
+                      Master graduate
+                    </option>
+                  </select>
+                </label>
+                <label>
+                  Major
+                  <input name="major" value="Computer Engineering" maxlength="120" required>
+                </label>
+                <label>
+                  GPA
+                  <input name="gpa" type="number" min="0" max="4" step="0.01" value="3.72">
+                </label>
+                <label>
+                  GPA scale
+                  <select name="gpaScale">
+                    <option>
+                      4.0
+                    </option>
+                  </select>
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="panel">
+              <legend>
+                Language
+              </legend>
+              <div class="profile-grid">
+                <label>
+                  TOPIK level
+                  <select name="topik">
+                    <option>
+                      Not taken
+                    </option>
+                    <option>
+                      1
+                    </option>
+                    <option>
+                      2
+                    </option>
+                    <option selected>
+                      3
+                    </option>
+                    <option>
+                      4
+                    </option>
+                    <option>
+                      5
+                    </option>
+                    <option>
+                      6
+                    </option>
+                  </select>
+                </label>
+                <label>
+                  IELTS score
+                  <input name="ielts" type="number" min="0" max="9" step="0.5" value="6.5">
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="panel">
+              <legend>
+                Study Goals
+              </legend>
+              <div class="profile-grid">
+                <label>
+                  Target degree
+                  <select name="degree">
+                    <option>
+                      Master’s
+                    </option>
+                    <option>
+                      Bachelor’s
+                    </option>
+                    <option>
+                      Doctorate
+                    </option>
+                  </select>
+                </label>
+                <label>
+                  Research interests
+                  <input name="interests" value="AI in education" maxlength="160">
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="panel">
+              <legend>
+                Preferences
+              </legend>
+              <div class="profile-grid">
+                <label>
+                  Funding preference
+                  <select name="funding">
+                    <option>
+                      Full funding preferred
+                    </option>
+                    <option>
+                      Partial funding considered
+                    </option>
+                  </select>
+                </label>
+                <label>
+                  Location preference
+                  <select name="location">
+                    <option>
+                      Open to locations across Korea
+                    </option>
+                    <option>
+                      Seoul region preferred
+                    </option>
+                    <option>
+                      Daejeon region preferred
+                    </option>
+                  </select>
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="panel">
+              <legend>
+                Documents
+              </legend>
+              <p>
+                Sample checklist only. No files are stored or uploaded.
+              </p>
+              <ul class="document-list">
+                <li>
+                  <span>
+                    Academic transcript
+                  </span>
+                  <span class="badge cyan">
+                    Sample ready
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    Resume
+                  </span>
+                  <span class="badge cyan">
+                    Sample ready
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    Study plan
+                  </span>
+                  <span class="badge gold">
+                    To prepare
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    Passport copy
+                  </span>
+                  <span class="badge gold">
+                    To prepare
+                  </span>
+                </li>
+              </ul>
+            </fieldset>
+            <div class="profile-actions">
+              <button class="primary" type="submit">
+                Preview my profile summary
+              </button>
+              <a class="ghost" href="#opportunities">
+                Explore demo opportunities
+              </a>
+              <p class="small">
+                Preview only · no account, saving, or real AI calculation.
+              </p>
+            </div>
+          </form>
+        </section>
+        <section class="screen" data-screen="opportunities" aria-labelledby="opportunities-title" hidden>
+          <div class="pagehead">
+            <div>
+              <span class="badge cyan">
+                02 / Match
+              </span>
+              <h1 id="opportunities-title" tabindex="-1">
+                Find a direction that fits.
+              </h1>
+              <p>
+                Explainable demo matches for Sara’s sample profile. All funding, university labels, and deadlines below are illustrative—not verified opportunity facts.
+              </p>
+            </div>
+            <a class="ghost" href="#profile">
+              Explore My Profile
+            </a>
+          </div>
+          <div class="panel sample-context">
+            <h2>
+              Sample matching context
+            </h2>
+            <p>
+              Iran · Master’s target · Computer Engineering · GPA 3.72 / 4.0 · TOPIK 3 · IELTS 6.5 · AI in education
+            </p>
+            <p class="small">
+              Fixed compatibility examples. Profile edits do not recalculate scores. Match percentage is not admission probability.
+            </p>
+          </div>
+          <div class="match-list" data-opportunity-list="workspace">
+          </div>
+          <div class="panel workspace-section">
+            <h2>
+              From possibility to preparation
+            </h2>
+            <p>
+              Application creation and verified opportunity details are planned for Phase 2. For now, explore how a sample case makes the next steps visible.
+            </p>
+            <a class="primary" href="#applications">
+              Explore sample application
+            </a>
+          </div>
+        </section>
+        <section class="screen" data-screen="applications" aria-labelledby="applications-title" hidden>
+          <div class="pagehead">
+            <div>
+              <span class="badge gold">
+                03 / Apply → 04 / Track
+              </span>
+              <h1 id="applications-title" tabindex="-1">
+                A clear view of your next steps.
+              </h1>
+              <p>
+                One illustrative application. No university submission or live case management takes place in this prototype.
+              </p>
+            </div>
+            <a class="ghost" href="#opportunities">
+              Explore demo matches
+            </a>
+          </div>
+          <section class="panel" aria-labelledby="case-title">
+            <div class="heading-row">
+              <div>
+                <span class="badge gold">
+                  Preparing documents
+                </span>
+                <h2 id="case-title">
+                  Graduate scholarship · sample case
+                </h2>
+                <p>
+                  Demo reference DEMO-001 · Fictional mentor: Mina Park
+                </p>
+              </div>
+              <span class="badge">
+                14 days remaining · demo
+              </span>
+            </div>
+            <ol class="track">
+              <li class="done">
+                <strong>
+                  Profile
+                </strong>
+                <span>
+                  Complete
+                </span>
+              </li>
+              <li class="done">
+                <strong>
+                  Match
+                </strong>
+                <span>
+                  Selected
+                </span>
+              </li>
+              <li class="now" aria-current="step">
+                <strong>
+                  Documents
+                </strong>
+                <span>
+                  In progress
+                </span>
+              </li>
+              <li>
+                <strong>
+                  Review
+                </strong>
+                <span>
+                  Not started
+                </span>
+              </li>
+              <li>
+                <strong>
+                  Submission
+                </strong>
+                <span>
+                  Not started
+                </span>
+              </li>
+              <li>
+                <strong>
+                  Result
+                </strong>
+                <span>
+                  Not started
+                </span>
+              </li>
+            </ol>
+            <p class="small">
+              Current stage: preparing documents. No documents have been uploaded; “ready” represents sample checklist data.
+            </p>
+          </section>
+          <div class="grid cols2 workspace-section">
+            <section class="panel">
+              <h2>
+                Document checklist
+              </h2>
+              <p>
+                2 sample documents ready · 2 to prepare.
+              </p>
+              <ul class="document-list">
+                <li>
+                  <span>
+                    Academic transcript
+                  </span>
+                  <span class="badge cyan">
+                    Sample ready
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    Resume
+                  </span>
+                  <span class="badge cyan">
+                    Sample ready
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    Study plan
+                  </span>
+                  <span class="badge gold">
+                    To prepare
+                  </span>
+                </li>
+                <li>
+                  <span>
+                    Passport copy
+                  </span>
+                  <span class="badge gold">
+                    To prepare
+                  </span>
+                </li>
+              </ul>
+              <p class="small">
+                Document uploads are coming in a later phase. Do not provide sensitive files.
+              </p>
+            </section>
+            <section class="panel">
+              <h2>
+                Tasks & next actions
+              </h2>
+              <ol class="task-list">
+                <li>
+                  <strong>
+                    Outline your study plan
+                  </strong>
+                  <p>
+                    Describe your goals, research interests, and preparation.
+                  </p>
+                </li>
+                <li>
+                  <strong>
+                    Review passport requirements
+                  </strong>
+                  <p>
+                    Confirm requirements through an official source before a real application.
+                  </p>
+                </li>
+                <li>
+                  <strong>
+                    Ask for mentor feedback
+                  </strong>
+                  <p>
+                    Use the sample guidance to understand the support concept.
+                  </p>
+                </li>
+              </ol>
+              <a class="primary" href="#mentor">
+                View sample mentor feedback
+              </a>
+            </section>
+          </div>
+          <section class="panel workspace-section">
+            <h2>
+              What happens after preparation?
+            </h2>
+            <p>
+              The future tracker will connect review, submission, results, and arrival support. This demo keeps those stages clearly marked as not started.
+            </p>
+            <a class="ghost" href="#services">
+              Explore arrival & study support
+            </a>
+          </section>
+        </section>
+        <section class="screen" data-screen="services" aria-labelledby="services-title" hidden>
+          <div class="pagehead">
+            <div>
+              <span class="badge cyan">
+                Support for the whole journey
+              </span>
+              <h1 id="services-title" tabindex="-1">
+                Prepare, arrive, and feel at home.
+              </h1>
+              <p>
+                Explore the support vision. Guidance previews are illustrative; enrollment, bookings, payments, and service delivery are not available.
+              </p>
+            </div>
+          </div>
+          <section class="workspace-section">
+            <h2>
+              Prepare for study
+            </h2>
+            <div class="grid cols3">
+              <article class="card">
+                <div>
+                  <span class="badge cyan">
+                    Learn Korean
+                  </span>
+                  <h3>
+                    Language preparation
+                  </h3>
+                  <p>
+                    Courses, writing practice, and study resources tailored to a future study goal.
+                  </p>
+                </div>
+                <button class="soft" data-preview="language">
+                  Preview language support
+                </button>
+              </article>
+              <article class="card">
+                <div>
+                  <span class="badge gold">
+                    Exams
+                  </span>
+                  <h3>
+                    TOPIK & IELTS preparation
+                  </h3>
+                  <p>
+                    Understand planning, official registration steps, and preparation needs.
+                  </p>
+                </div>
+                <button class="soft" data-preview="exams">
+                  Preview exam guidance
+                </button>
+              </article>
+              <article class="card">
+                <div>
+                  <span class="badge">
+                    Applications
+                  </span>
+                  <h3>
+                    Document preparation
+                  </h3>
+                  <p>
+                    Study-plan and resume support, with a clear preparation checklist.
+                  </p>
+                </div>
+                <a class="soft" href="#applications">
+                  View sample document checklist
+                </a>
+              </article>
+            </div>
+          </section>
+          <section class="workspace-section">
+            <h2>
+              Arrive & live in Korea
+            </h2>
+            <div class="grid cols3">
+              <article class="card">
+                <div>
+                  <span class="badge gold">
+                    Visa
+                  </span>
+                  <h3>
+                    Arrival preparation
+                  </h3>
+                  <p>
+                    A future planning space for visa requirements and arrival tasks.
+                  </p>
+                </div>
+                <button class="soft" data-preview="arrival">
+                  Preview arrival roadmap
+                </button>
+              </article>
+              <article class="card">
+                <div>
+                  <span class="badge cyan">
+                    Korea Life
+                  </span>
+                  <h3>
+                    Settlement essentials
+                  </h3>
+                  <p>
+                    Explore housing, transport, SIM, residence-card, and banking topics.
+                  </p>
+                </div>
+                <button class="soft" data-preview="settlement">
+                  Preview settlement topics
+                </button>
+              </article>
+              <article class="card">
+                <div>
+                  <span class="badge">
+                    Community
+                  </span>
+                  <h3>
+                    Find your people
+                  </h3>
+                  <p>
+                    A vision for study groups, writing circles, and student connections.
+                  </p>
+                </div>
+                <button class="soft" data-preview="community">
+                  Preview community support
+                </button>
+              </article>
+            </div>
+          </section>
+        </section>
+        <section class="screen" data-screen="mentor" aria-labelledby="mentor-title" hidden>
+          <div class="pagehead">
+            <div>
+              <span class="badge cyan">
+                Human support, alongside your journey
+              </span>
+              <h1 id="mentor-title" tabindex="-1">
+                A little guidance goes a long way.
+              </h1>
+              <p>
+                Meet a fictional mentor and explore how support could fit into your application journey.
+              </p>
+            </div>
+          </div>
+          <div class="grid cols2">
+            <section class="panel mentor-card">
+              <span class="mentor-avatar" aria-hidden="true">
+                MP
+              </span>
+              <span class="badge cyan">
+                Fictional demo mentor
+              </span>
+              <h2>
+                Mina Park
+              </h2>
+              <p>
+                Sample focus: graduate application preparation and study planning.
+              </p>
+              <p class="small">
+                No real assignment, verified qualifications, or live messaging is implied.
+              </p>
+              <button class="primary" data-preview="mentor">
+                Preview a mentor request
+              </button>
+            </section>
+            <section class="panel">
+              <span class="eyebrow">
+                Sample feedback · DEMO-001
+              </span>
+              <h2>
+                Start with your study plan.
+              </h2>
+              <blockquote>
+                “Connect your study plan to your interests in AI and education. Explain what you want to learn, why Korea, and how your background prepares you.”
+              </blockquote>
+              <h3>
+                Your next conversation
+              </h3>
+              <ul>
+                <li>
+                  Which program direction fits your goals?
+                </li>
+                <li>
+                  What should your study plan emphasize?
+                </li>
+                <li>
+                  Which requirements need official verification?
+                </li>
+              </ul>
+              <a class="ghost" href="#applications">
+                Return to sample application
+              </a>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+    <footer class="site-footer">
+      <a href="#home">
+        My_Hanguel
+      </a>
+      <p>
+        Your AI Gateway to Study and Life in Korea
+      </p>
+      <span>
+        Phase 1 prototype · illustrative data · no live application services
+      </span>
+    </footer>
+    <dialog id="preview-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+      <div class="dialog-heading">
+        <span class="badge cyan">
+          Demo preview
+        </span>
+        <button class="dialog-close" type="button" aria-label="Close preview">
+          ×
+        </button>
+      </div>
+      <h2 id="dialog-title">
+      </h2>
+      <p id="dialog-description">
+      </p>
+      <div id="dialog-content">
+      </div>
+      <p class="small">
+        This preview does not save data, send messages, or create a booking.
+      </p>
+      <button class="primary dialog-dismiss" type="button">
+        Close preview
+      </button>
+    </dialog>
+    <noscript>
+      <p class="noscript-notice">
+        Enable JavaScript to explore the student workspace. The landing page remains available below.
+      </p>
+    </noscript>
+  </body>
 </html>
