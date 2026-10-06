@@ -2,9 +2,9 @@
 
 // Fixed illustrative content for Phase 1; no AI calculation or persistence.
 const opportunities = [
-  { id: 'graduate', name: 'Graduate Scholarship Pathway', university: 'Illustrative Korean university', score: 94, funding: 'Full-funding scenario', deadline: '14 days remaining · demo', reasons: ['Graduate study goal', 'Strong sample GPA', 'Broad research interests'] },
-  { id: 'research', name: 'AI Research Pathway', university: 'Illustrative science & technology university', score: 88, funding: 'Research-support scenario', deadline: '21 days remaining · demo', reasons: ['Computer Engineering background', 'AI in education interest', 'English study preference'] },
-  { id: 'career', name: 'Applied Engineering Pathway', university: 'Illustrative technology university', score: 81, funding: 'Partial-funding scenario', deadline: '30 days remaining · demo', reasons: ['Major alignment', 'Career-focused study', 'Further Korean preparation suggested'] }
+  { id: 'graduate', name: 'Graduate Scholarship Pathway', university: 'Korean university pathway', score: 94, funding: 'Full-funding scenario', deadline: '14 days remaining', reasons: ['Graduate study goal', 'Strong academic background', 'Broad research interests'] },
+  { id: 'research', name: 'AI Research Pathway', university: 'Science & technology university pathway', score: 88, funding: 'Research-support scenario', deadline: '21 days remaining', reasons: ['Computer Engineering background', 'AI in education interest', 'English study preference'] },
+  { id: 'career', name: 'Applied Engineering Pathway', university: 'Technology university pathway', score: 81, funding: 'Partial-funding scenario', deadline: '30 days remaining', reasons: ['Major alignment', 'Career-focused study', 'Further Korean preparation suggested'] }
 ];
 const screens = new Map(Array.from(document.querySelectorAll('[data-screen]'), screen => [screen.dataset.screen, screen]));
 const dialog = document.getElementById('preview-dialog');
@@ -22,21 +22,28 @@ function opportunityCard(opportunity, compact) {
   const card = element('article', compact ? 'card opportunity-card' : 'match-card');
   const score = element('div', 'score-ring', `${opportunity.score}%`);
   score.style.setProperty('--score', `${opportunity.score}%`);
-  score.setAttribute('aria-label', `Demo profile match: ${opportunity.score} percent. Not admission probability.`);
+  score.setAttribute('aria-label', `Profile Match: ${opportunity.score} percent. Not admission probability.`);
   const content = element('div', 'opportunity-content');
-  content.append(element('span', 'badge cyan', 'Demo profile match'), element('h3', '', opportunity.name), element('p', 'university-label', opportunity.university));
+  content.append(element('span', 'badge cyan', 'Profile Match'), element('h3', '', opportunity.name), element('p', 'university-label', opportunity.university));
   const facts = element('dl', 'opportunity-facts');
   for (const [label, value] of [['Funding', opportunity.funding], ['Deadline', opportunity.deadline]]) {
     const row = element('div'); row.append(element('dt', '', label), element('dd', '', value)); facts.append(row);
   }
-  content.append(facts, element('p', 'reason-label', 'Why this sample profile matches'));
+  if (compact) content.append(facts);
+  content.append(element('p', 'reason-label', 'Why it matches'));
   const reasons = element('ul', 'match-reasons');
   opportunity.reasons.forEach(reason => reasons.append(element('li', 'reason', reason)));
   content.append(reasons);
-  const button = element('button', 'soft', 'Preview this demo match');
+  const button = element('button', 'soft', 'Explore this match');
   button.type = 'button'; button.dataset.opportunity = opportunity.id;
-  button.setAttribute('aria-label', `Preview ${opportunity.name} demo match`);
-  card.append(score, content, button);
+  button.setAttribute('aria-label', `Preview ${opportunity.name} match preview`);
+  if (compact) {
+    card.append(score, content, button);
+  } else {
+    const action = element('div', 'opportunity-action');
+    action.append(facts, button);
+    card.append(score, content, action);
+  }
   return card;
 }
 
@@ -96,7 +103,7 @@ document.addEventListener('click', event => {
   const opportunityButton = event.target.closest('[data-opportunity]');
   if (opportunityButton) {
     const opportunity = opportunities.find(item => item.id === opportunityButton.dataset.opportunity);
-    preview(opportunity.name, `${opportunity.score}% illustrative profile compatibility, not admission probability. This is a concept preview, not a verified opportunity detail page.`, [opportunity.university, `Funding: ${opportunity.funding}`, `Deadline: ${opportunity.deadline}`, ...opportunity.reasons, 'Verified eligibility, official sources, and application creation are planned for Phase 2.'], opportunityButton);
+    preview(opportunity.name, `${opportunity.score}% profile compatibility, not admission or funding probability. This fictional pathway is not a verified opportunity listing.`, [opportunity.university, `Funding: ${opportunity.funding}`, `Deadline: ${opportunity.deadline}`, ...opportunity.reasons, 'Official sources and application creation are not available in this experience.'], opportunityButton);
   }
   const serviceButton = event.target.closest('[data-preview]');
   if (serviceButton && servicePreviews[serviceButton.dataset.preview]) {
