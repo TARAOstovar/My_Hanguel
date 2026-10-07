@@ -9,7 +9,7 @@
       My_Hanguel | Study and Life in Korea
     </title>
     <link rel="stylesheet" href="assets/styles.css">
-    <script src="assets/app.js" defer>
+    <script type="module" src="assets/app.js">
     </script>
   </head>
   <body>
@@ -51,7 +51,7 @@
     </header>
     <div class="prototype-note">
       <span class="demo-dot" aria-hidden="true"></span><strong>Interactive Demo</strong>
-      <details class="demo-disclosure"><summary>About this experience</summary><p>Explore a fictional student journey. Opportunities, scores, deadlines, cases, and mentors are examples. No live AI, university integrations, submissions, payments, bookings, or document uploads are available.</p></details>
+      <button class="reset-demo" type="button" data-reset>Reset Demo</button><details class="demo-disclosure"><summary>About this experience</summary><p>Explore a fictional student journey with rules-based compatibility matching. Opportunities, deadlines, cases, and mentors are synthetic. No real AI, university integrations, submissions, payments, bookings, or document uploads. Demo data is stored only in this browser; use fictional information, not real personal data.</p></details>
     </div>
     <div class="workspace-shell">
       <aside class="workspace-sidebar">
@@ -109,6 +109,8 @@
         </div>
       </aside>
       <main id="main-content" tabindex="-1">
+        <p id="storage-note" class="small storage-note">Demo data is stored only in this browser. Use fictional information.</p>
+        <p id="app-status" class="status-message" role="status" aria-live="polite"></p>
         <section class="screen active landing" data-screen="home" aria-labelledby="home-title">
           <div class="hero">
             <div class="hero-content">
@@ -252,17 +254,17 @@
                   See the fit. Understand the why.
                 </h2>
                 <p>
-                  Example pathways for a graduate student. Funding, university descriptions, and deadlines are fictional, not verified scholarship listings.
+                  Synthetic pathways ranked for your saved profile. Funding, institutions, and deadlines are examples, not verified scholarship listings.
                 </p>
               </div>
               <a class="ghost" href="#opportunities">
-                Explore all demo matches
+                Explore all matches
               </a>
             </div>
             <div class="grid cols3" data-opportunity-list="preview">
             </div>
             <p class="small score-disclosure">
-              Profile Match measures compatibility with the sample profile. It is not the probability of admission or funding.
+              Profile Match measures compatibility with your saved profile. It is not the probability of admission or funding.
             </p>
           </section>
           <section class="landing-block" aria-labelledby="tracking-preview-title">
@@ -277,105 +279,7 @@
                 Your documents, tasks, and mentor guidance, connected to one clear next step.
               </p>
             </div>
-            <div class="panel">
-              <div class="heading-row">
-                <div>
-                  <span class="badge gold">
-                    Current stage · Preparing documents
-                  </span>
-                  <h3>
-                    Graduate scholarship application
-                  </h3>
-                </div>
-                <a class="ghost" href="#applications">
-                  Explore the tracker
-                </a>
-              </div>
-              <ol class="track">
-                <li class="done">
-                  <strong>
-                    Profile
-                  </strong>
-                  <span>
-                    Complete
-                  </span>
-                </li>
-                <li class="done">
-                  <strong>
-                    Match
-                  </strong>
-                  <span>
-                    Selected
-                  </span>
-                </li>
-                <li class="now" aria-current="step">
-                  <strong>
-                    Documents
-                  </strong>
-                  <span>
-                    In progress
-                  </span>
-                </li>
-                <li>
-                  <strong>
-                    Review
-                  </strong>
-                  <span>
-                    Not started
-                  </span>
-                </li>
-                <li>
-                  <strong>
-                    Submission
-                  </strong>
-                  <span>
-                    Not started
-                  </span>
-                </li>
-                <li>
-                  <strong>
-                    Result
-                  </strong>
-                  <span>
-                    Not started
-                  </span>
-                </li>
-              </ol>
-              <div class="preview-details">
-                <p>
-                  <strong>
-                    Documents
-                  </strong>
-                  <span>
-                    2 ready · 2 to prepare
-                  </span>
-                </p>
-                <p>
-                  <strong>
-                    Next action
-                  </strong>
-                  <span>
-                    Prepare your study plan
-                  </span>
-                </p>
-                <p>
-                  <strong>
-                    Preparation deadline
-                  </strong>
-                  <span>
-                    14 days remaining
-                  </span>
-                </p>
-                <p>
-                  <strong>
-                    Mentor feedback
-                  </strong>
-                  <span>
-                    Connect your goals to the program
-                  </span>
-                </p>
-              </div>
-            </div>
+            <div id="home-case-preview"></div>
           </section>
           <section class="final-cta">
             <span class="eyebrow">
@@ -396,125 +300,9 @@
           </section>
         </section>
         <section class="screen" data-screen="dashboard" aria-labelledby="dashboard-title" hidden>
-          <div class="pagehead">
-            <div>
-              <span class="badge cyan">
-                Your Korea journey
-              </span>
-              <h1 id="dashboard-title" tabindex="-1">
-                Your next step, made clear.
-              </h1>
-              <p>
-                Welcome, Sara. Here is what to focus on in your Korea journey.
-              </p>
-            </div>
-            <a class="ghost" href="#profile">
-              Review My Profile
-            </a>
-          </div>
-          <div class="next-action panel">
-            <div>
-              <span class="eyebrow">
-                Your next action
-              </span>
-              <h2>
-                Prepare your study plan.
-              </h2>
-              <p>
-                Start with your goals and research interests. Your study plan and passport copy are the two documents still to prepare.
-              </p>
-            </div>
-            <a class="primary" href="#applications">
-              View documents & next actions
-            </a>
-          </div>
-          <div class="dashboard-stats">
-            <section class="journey-status" aria-labelledby="journey-status-title"><h2 id="journey-status-title">Your journey</h2><ol class="workspace-journey"><li class="complete">Profile</li><li class="complete">Match</li><li class="current" aria-current="step">Apply</li><li>Track</li><li>Arrive</li><li>Live</li></ol></section>
-            <section class="quiet-stat"><h2>Preparation deadline</h2><strong>14 days remaining</strong><p>Example preparation window</p></section>
-            <section class="quiet-stat"><h2>Applications</h2><strong>1 active case</strong><p>Preparing documents · not submitted</p></section>
-          </div>
-          <div class="grid cols2">
-            <section class="panel" aria-labelledby="priorities-title">
-              <h2 id="priorities-title">
-                Priority actions
-              </h2>
-              <ol class="priority-list">
-                <li>
-                  <div>
-                    <strong>
-                      Prepare a study plan
-                    </strong>
-                    <p>
-                      Explain your academic goals and Korea study interests.
-                    </p>
-                  </div>
-                  <a href="#applications">
-                    View checklist
-                  </a>
-                </li>
-                <li>
-                  <div>
-                    <strong>
-                      Review passport requirements
-                    </strong>
-                    <p>
-                      Do not upload personal documents in this demo.
-                    </p>
-                  </div>
-                  <a href="#services">
-                    Explore preparation support
-                  </a>
-                </li>
-                <li>
-                  <div>
-                    <strong>
-                      Discuss your application direction
-                    </strong>
-                    <p>
-                      Mina’s guidance can help you shape your study plan.
-                    </p>
-                  </div>
-                  <a href="#mentor">
-                    Read mentor guidance
-                  </a>
-                </li>
-              </ol>
-            </section>
-            <section class="panel mentor-guidance" aria-labelledby="advisor-title">
-              <span class="badge cyan">
-                Mentor perspective
-              </span>
-              <h2 id="advisor-title">
-                You do not have to plan alone.
-              </h2>
-              <blockquote>
-                “Connect your study plan to your interests in AI and education. Start with your goals, then explain the preparation you need.”
-              </blockquote>
-              <p>
-                Mina Park · example mentor
-              </p>
-              <a class="ghost" href="#mentor">
-                Read Mina’s guidance
-              </a>
-            </section>
-          </div>
-          <section class="workspace-section" aria-labelledby="recommended-title">
-            <div class="heading-row">
-              <div>
-                <h2 id="recommended-title">
-                  Recommended opportunities
-                </h2>
-                <p>
-                  Three pathways to explore based on the example profile.
-                </p>
-              </div>
-              <a href="#opportunities">
-                View all opportunities
-              </a>
-            </div>
-            <div class="grid cols3" data-opportunity-list="dashboard">
-            </div>
-          </section>
+          <div class="pagehead"><div><span class="badge cyan">Your Korea journey</span><h1 id="dashboard-title" tabindex="-1">Your next step, made clear.</h1><p id="dashboard-welcome"></p></div><a class="ghost" href="#profile">Review My Profile</a></div>
+          <div id="dashboard-state"></div>
+          <section class="workspace-section" aria-labelledby="recommended-title"><div class="heading-row"><div><h2 id="recommended-title">Recommended opportunities</h2><p>Ranked from your saved profile, with strengths and preparation gaps.</p></div><a href="#opportunities">View all opportunities</a></div><div class="grid cols3" data-opportunity-list="dashboard"></div></section>
         </section>
         <section class="screen" data-screen="profile" aria-labelledby="profile-title" hidden>
           <div class="pagehead">
@@ -526,7 +314,7 @@
                 Your story starts here.
               </h1>
               <p>
-                Your background, goals, and preferences will shape your Korea journey. Explore the fields below; edits are not saved or used to recalculate matches.
+                Your background, goals, and preferences shape your Korea journey. Changes update the rest of the workspace only when you save. Please use fictional information.
               </p>
             </div>
             <a class="ghost" href="#dashboard">
@@ -534,10 +322,11 @@
             </a>
           </div>
           <div class="panel profile-intro">
-            <div><span class="eyebrow">Your profile → your possibilities</span><h2>A stronger story starts with your goals.</h2><p>Sara Ahmadi · Computer Engineering graduate · Master’s in Korea</p><p class="profile-next"><strong>Next focus</strong> Review your study goals and research interests, then preview your profile summary.</p></div>
-            <div class="profile-completion"><label for="sample-progress">Profile readiness <strong>75%</strong></label><progress id="sample-progress" max="100" value="75">75%</progress><p class="small">Example readiness only. Field edits are not saved and do not recalculate matches.</p><a href="#opportunities">See how a profile connects to matches →</a></div>
+            <div><span class="eyebrow">Your profile → your possibilities</span><h2>A stronger story starts with your goals.</h2><p id="profile-summary"></p><p class="profile-next" id="profile-next"></p></div>
+            <div class="profile-completion"><label for="sample-progress">Profile completion <strong id="profile-percent"></strong></label><progress id="sample-progress" max="100" value="0">0%</progress><p class="small">Based on saved profile fields, not admission chances.</p><a href="#opportunities">Explore matches from your saved profile →</a></div>
           </div>
-          <form id="profile-demo" class="profile-sections">
+          <form id="profile-demo" class="profile-sections" novalidate>
+            <p id="profile-errors" class="form-error-summary" role="alert" tabindex="-1" hidden></p>
             <fieldset class="panel">
               <legend>
                 Personal
@@ -545,11 +334,11 @@
               <div class="profile-grid">
                 <label>
                   Full name
-                  <input name="fullName" autocomplete="name" value="Sara Ahmadi" maxlength="100" required>
+                  <input name="fullName" autocomplete="name" maxlength="100" required>
                 </label>
                 <label>
                   Nationality
-                  <input name="nationality" value="Iranian" maxlength="100" required>
+                  <input name="nationality" maxlength="100" required>
                 </label>
               </div>
             </fieldset>
@@ -574,18 +363,16 @@
                 </label>
                 <label>
                   Major
-                  <input name="major" value="Computer Engineering" maxlength="120" required>
+                  <input name="major" maxlength="120" required>
                 </label>
                 <label>
                   GPA
-                  <input name="gpa" type="number" min="0" max="4" step="0.01" value="3.72">
+                  <input name="gpa" type="number" min="0" max="100" step="0.01" inputmode="decimal">
                 </label>
                 <label>
                   GPA scale
                   <select name="gpaScale">
-                    <option>
-                      4.0
-                    </option>
+                    <option value="4">4.0</option><option value="4.3">4.3</option><option value="4.5">4.5</option><option value="5">5.0</option><option value="100">100</option>
                   </select>
                 </label>
               </div>
@@ -598,16 +385,14 @@
                 <label>
                   TOPIK level
                   <select name="topik">
-                    <option>
-                      Not taken
-                    </option>
+                    <option value="0">Not taken</option>
                     <option>
                       1
                     </option>
                     <option>
                       2
                     </option>
-                    <option selected>
+                    <option>
                       3
                     </option>
                     <option>
@@ -623,7 +408,7 @@
                 </label>
                 <label>
                   IELTS score
-                  <input name="ielts" type="number" min="0" max="9" step="0.5" value="6.5">
+                  <input name="ielts" type="number" min="0" max="9" step="0.5">
                 </label>
               </div>
             </fieldset>
@@ -648,7 +433,7 @@
                 </label>
                 <label>
                   Research interests
-                  <input name="interests" value="AI in education" maxlength="160">
+                  <input name="interests" maxlength="160">
                 </label>
               </div>
             </fieldset>
@@ -677,9 +462,7 @@
                     <option>
                       Seoul region preferred
                     </option>
-                    <option>
-                      Daejeon region preferred
-                    </option>
+                    <option>Daejeon region preferred</option><option>Busan region preferred</option>
                   </select>
                 </label>
               </div>
@@ -689,52 +472,19 @@
                 Documents
               </legend>
               <p>
-                Plan what to prepare. This checklist is an example; no files are stored or uploaded.
+                Checklist for the selected application. No files are uploaded or stored in this demo.
               </p>
-              <ul class="document-list">
-                <li>
-                  <span>
-                    Academic transcript
-                  </span>
-                  <span class="badge cyan">
-                    Ready
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    Resume
-                  </span>
-                  <span class="badge cyan">
-                    Ready
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    Study plan
-                  </span>
-                  <span class="badge gold">
-                    To prepare
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    Passport copy
-                  </span>
-                  <span class="badge gold">
-                    To prepare
-                  </span>
-                </li>
-              </ul>
+              <ul class="document-list" id="profile-documents"></ul>
             </fieldset>
             <div class="profile-actions">
               <button class="primary" type="submit">
-                Preview my profile summary
+                Save Profile & Update Matches
               </button>
               <a class="ghost" href="#opportunities">
                 Explore Opportunities
               </a>
               <p class="small">
-                Your preview stays in this page only.
+                Demo data is stored only in this browser. Changes are saved when you select Save Profile & Update Matches.
               </p>
             </div>
           </form>
@@ -756,11 +506,7 @@
               Explore My Profile
             </a>
           </div>
-          <div class="panel sample-context">
-            <div class="context-heading"><h2>Your matching profile</h2><span class="small">Sara · profile used in this demo</span></div>
-            <dl class="profile-context"><div><dt>Target</dt><dd>Master’s</dd></div><div><dt>Field</dt><dd>Computer Engineering</dd></div><div><dt>GPA</dt><dd>3.72 / 4.0</dd></div><div><dt>TOPIK</dt><dd>Level 3</dd></div><div><dt>IELTS</dt><dd>6.5</dd></div><div><dt>Interest</dt><dd>AI in education</dd></div></dl>
-            <p class="small">Profile Match measures compatibility with the sample profile. It is not the probability of admission or funding. Scores are fixed; profile edits do not recalculate them.</p>
-          </div>
+          <div class="panel sample-context"><div class="context-heading"><h2>Your matching profile</h2><span class="small">Saved profile · rules-based matching</span></div><dl class="profile-context" id="matching-context"></dl><p class="small">Profile Match measures compatibility, not probability of admission or funding. Eligibility is checked separately against synthetic requirements.</p></div>
           <div class="match-list" data-opportunity-list="workspace">
           </div>
           <div class="panel workspace-section">
@@ -768,192 +514,20 @@
               From possibility to preparation
             </h2>
             <p>
-              Explore the preparation tracker to see what comes next. Creating applications and verified opportunity details are not available yet.
+              Open a pathway, review its synthetic requirements, and start a preparation case. No university receives these applications.
             </p>
             <a class="primary" href="#applications">
               Explore application tracker
             </a>
           </div>
         </section>
+        <section class="screen" data-screen="opportunity" aria-labelledby="opportunity-title" hidden>
+          <div class="pagehead"><div><span class="badge cyan">Synthetic opportunity</span><h1 id="opportunity-title" tabindex="-1"></h1><p id="opportunity-description"></p></div><a class="ghost" href="#opportunities">Back to Opportunities</a></div>
+          <div id="opportunity-state"></div>
+        </section>
         <section class="screen" data-screen="applications" aria-labelledby="applications-title" hidden>
-          <div class="pagehead">
-            <div>
-              <span class="badge gold">
-                03 / Apply → 04 / Track
-              </span>
-              <h1 id="applications-title" tabindex="-1">
-                A clear view of your next steps.
-              </h1>
-              <p>
-                Follow one example case from preparation to a future result. No application has been submitted or connected to a university.
-              </p>
-            </div>
-            <a class="ghost" href="#opportunities">
-              Explore Opportunities
-            </a>
-          </div>
-          <section class="panel case-overview" aria-labelledby="case-title">
-            <div class="heading-row">
-              <div>
-                <span class="badge gold">
-                  Preparing documents
-                </span>
-                <h2 id="case-title">
-                  Graduate scholarship preparation
-                </h2>
-                <p>
-                  Case DEMO-001 · Mentor: Mina Park (example)
-                </p>
-              </div>
-              <span class="badge">
-                14 days remaining
-              </span>
-            </div>
-            <ol class="track">
-              <li class="done">
-                <strong>
-                  Profile
-                </strong>
-                <span>
-                  Complete
-                </span>
-              </li>
-              <li class="done">
-                <strong>
-                  Match
-                </strong>
-                <span>
-                  Selected
-                </span>
-              </li>
-              <li class="now" aria-current="step">
-                <strong>
-                  Documents
-                </strong>
-                <span>
-                  In progress
-                </span>
-              </li>
-              <li>
-                <strong>
-                  Review
-                </strong>
-                <span>
-                  Not started
-                </span>
-              </li>
-              <li>
-                <strong>
-                  Submission
-                </strong>
-                <span>
-                  Not started
-                </span>
-              </li>
-              <li>
-                <strong>
-                  Result
-                </strong>
-                <span>
-                  Not started
-                </span>
-              </li>
-            </ol>
-            <div class="case-next"><div><span class="eyebrow">Next action</span><h3>Prepare your study plan.</h3><p>Describe your goals and research direction before mentor review.</p></div><a class="primary" href="#mentor">Read mentor guidance</a></div>
-            <p class="small">
-              Checklist statuses are examples, not uploaded files. Review, submission, and results have not started.
-            </p>
-          </section>
-          <div class="grid cols2 workspace-section">
-            <section class="panel">
-              <h2>
-                Document checklist
-              </h2>
-              <p>2 of 4 ready · Study plan and passport copy still to prepare.</p><label class="small" for="document-readiness">Document readiness · example</label><progress id="document-readiness" max="4" value="2">2 of 4</progress>
-              <ul class="document-list">
-                <li>
-                  <span>
-                    Academic transcript
-                  </span>
-                  <span class="badge cyan">
-                    Ready
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    Resume
-                  </span>
-                  <span class="badge cyan">
-                    Ready
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    Study plan
-                  </span>
-                  <span class="badge gold">
-                    To prepare
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    Passport copy
-                  </span>
-                  <span class="badge gold">
-                    To prepare
-                  </span>
-                </li>
-              </ul>
-              <p class="small">
-                Uploads are not available. Do not provide sensitive files.
-              </p>
-            </section>
-            <section class="panel">
-              <h2>
-                Tasks & next actions
-              </h2>
-              <ol class="task-list">
-                <li>
-                  <strong>
-                    Outline your study plan
-                  </strong>
-                  <p>
-                    Describe your goals, research interests, and preparation.
-                  </p>
-                </li>
-                <li>
-                  <strong>
-                    Review passport requirements
-                  </strong>
-                  <p>
-                    Confirm requirements through an official source before a real application.
-                  </p>
-                </li>
-                <li>
-                  <strong>
-                    Ask for mentor feedback
-                  </strong>
-                  <p>
-                    Discuss your study goals and the documents still to prepare.
-                  </p>
-                </li>
-              </ol>
-              <a class="primary" href="#mentor">
-                Read mentor feedback
-              </a>
-            </section>
-          </div>
-          <section class="panel workspace-section">
-            <h2>
-              What happens after preparation?
-            </h2>
-            <p>
-              After documents are ready, the next step would be review. Submission and results remain inactive in this experience.
-            </p>
-            <a class="ghost" href="#services">
-              Explore arrival & study support
-            </a>
-          </section>
+          <div class="pagehead"><div><span class="badge gold">03 / Apply → 04 / Track</span><h1 id="applications-title" tabindex="-1">A clear view of your next steps.</h1><p>Track your preparation cases. No university receives an application and no files are uploaded or stored in this demo.</p></div><a class="ghost" href="#opportunities">Explore Opportunities</a></div>
+          <div id="applications-state"></div>
         </section>
         <section class="screen" data-screen="services" aria-labelledby="services-title" hidden>
           <div class="pagehead">
@@ -1117,14 +691,12 @@
             </section>
             <section class="panel">
               <span class="eyebrow">
-                Mentor feedback · DEMO-001
+                Mentor guidance
               </span>
               <h2>
-                Start with your study plan.
+                Your preparation, in perspective.
               </h2>
-              <blockquote>
-                “Connect your study plan to your interests in AI and education. Explain what you want to learn, why Korea, and how your background prepares you.”
-              </blockquote>
+              <blockquote id="mentor-feedback"></blockquote>
               <h3>
                 Your next conversation
               </h3>
@@ -1180,6 +752,7 @@
         Close preview
       </button>
     </dialog>
+    <dialog id="reset-dialog" aria-labelledby="reset-title" aria-describedby="reset-description"><h2 id="reset-title">Reset this demo?</h2><p id="reset-description">Restore Sara’s original profile, matches, application, tasks, and checklists. Your My_Hanguel demo changes in this browser will be removed. Other browser data is not affected.</p><div class="dialog-actions"><button class="ghost" type="button" data-cancel-reset>Keep my changes</button><button class="primary" type="button" data-confirm-reset>Reset Demo</button></div></dialog>
     <noscript>
       <p class="noscript-notice">
         Enable JavaScript to explore the student workspace. The landing page remains available below.

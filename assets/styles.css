@@ -712,3 +712,52 @@ a:not(.skip-link) { min-height: 44px; }
 .mentor-guidance { align-self: start; }
 progress { appearance: none; border: 0; border-radius: 20px; background: #e7edf2; }
 progress::-moz-progress-bar { background: #16806f; border-radius: 20px; }
+
+/* Connected MVP controls reuse the approved Phase 1.1 visual language. */
+.reset-demo { border: 0; background: transparent; color: var(--blue); text-decoration: underline; text-underline-offset: 3px; padding: 8px; font-size: 11px; }
+.storage-note { margin: 0 0 12px; }
+.status-message:empty { display: none; }
+.status-message { border-left: 3px solid #16806f; background: #eaf5f2; padding: 12px 16px; font-size: 14px; color: var(--blue); line-height: 1.6; }
+.opportunity-card > .soft { display: inline-flex; width: 100%; justify-self: stretch; border: 1px solid #c4dedb; }
+.opportunity-action > a { display: inline-flex; width: 100%; }
+.opportunity-content > .badge { margin-block: 6px; }
+.match-gap { padding-left: 10px; border-left: 2px solid var(--gold); margin-top: 12px !important; color: #75521b !important; font-size: 12px !important; line-height: 1.5 !important; }
+.check-control { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; font-weight: 700; }
+.check-control input { appearance: auto; width: 20px; min-width: 20px; height: 20px; min-height: 20px; padding: 0; accent-color: #16806f; cursor: pointer; }
+.document-list li > .check-control { flex: 1; min-width: 0; }
+.task-checklist { list-style: none; padding: 0; }
+.task-checklist > li { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.task-checklist > li:last-child { border: 0; }
+.task-checklist p { margin-left: 30px; }
+.task-checklist a { display: inline-flex; align-items: center; min-height: 44px; margin-left: 30px; font-size: 13px; }
+.task-complete .check-control > span { text-decoration: line-through; color: #526074; }
+.application-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.case-tab { display: inline-flex; align-items: center; padding: 10px 14px; border: 1px solid var(--line); border-radius: 7px; background: white; text-decoration: none; font-size: 13px; font-weight: 700; }
+.case-tab[aria-current] { background: var(--blue); color: white; border-color: var(--blue); }
+.empty-state { padding: 28px; }
+.detail-summary { display: grid; grid-template-columns: 86px minmax(0, 1fr) minmax(200px, .8fr); gap: 24px; align-items: center; }
+.detail-summary h2 { margin: 0 0 10px; font-size: 24px; }
+.detail-summary .opportunity-facts { margin: 0; }
+.detail-summary .opportunity-facts > div { grid-template-columns: 100px minmax(0, 1fr); }
+#opportunity-state li { line-height: 1.7; margin-bottom: 8px; }
+#opportunity-state .panel > ul { padding-left: 20px; color: #526074; }
+.dialog-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; margin-top: 24px; }
+.field-error { font-size: 12px; color: #9e3030; font-weight: 400; }
+[aria-invalid="true"] { border-color: #9e3030; }
+.form-error-summary { grid-column: 1 / -1; padding: 14px; background: #fff0f0; color: #9e3030; border-left: 3px solid #9e3030; }
+[data-opportunity-list="dashboard"] .opportunity-card:last-child > .soft { width: auto; }
+@media (max-width: 1120px) {
+  .detail-summary { grid-template-columns: 86px minmax(0, 1fr); }
+  .detail-summary > dl { grid-column: 1 / -1; }
+  [data-opportunity-list="dashboard"] .opportunity-card:last-child > .soft { width: 100%; }
+}
+@media (max-width: 760px) {
+  .prototype-note { justify-content: flex-start; gap: 4px 8px; }
+  .demo-disclosure { margin-left: auto; }
+  .detail-summary { grid-template-columns: 1fr; gap: 16px; }
+  .detail-summary > dl { grid-column: auto; }
+  .application-selector { display: grid; grid-template-columns: 1fr; }
+  .document-list li { flex-wrap: wrap; }
+  .document-list li > .check-control { flex-basis: 65%; }
+}
+.detail-summary > div > .primary { margin-top: 16px; }
