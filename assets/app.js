@@ -328,6 +328,8 @@ document.querySelector('.skip-link').addEventListener('click', event => { event.
 form.addEventListener('change', event => { if (event.target.name === 'gpaScale') form.elements.gpa.max = event.target.value; });
 form.addEventListener('submit', event => {
   event.preventDefault(); clearErrors();
+  clearTimeout(profileStatusTimer);
+  profileStatus.textContent = '';
   const { profile, errors } = profileValidation(Object.fromEntries(new FormData(form)));
   if (Object.keys(errors).length) {
     for (const [key, text] of Object.entries(errors)) {
@@ -339,8 +341,14 @@ form.addEventListener('submit', event => {
   }
   state.profile = profile;
   const persisted = save(); fillProfile(); renderAll();
-  const message = persisted ? 'Profile saved. Matches, completion, and dashboard are updated.' : 'Profile updated for this page only. Browser storage is unavailable.';
-  announce(message); document.getElementById('profile-save-status').textContent = message;
+  const message = persisted ? 'Profile saved. Your matches have been updated.' : 'Profile updated for this page only. Browser storage is unavailable.';
+  // Announce once, beside the action; the global status is above this long form.
+  document.getElementById('app-status').textContent = '';
+  requestAnimationFrame(() => {
+    profileStatus.textContent = message;
+    profileStatus.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+    if (persisted) profileStatusTimer = setTimeout(() => { profileStatus.textContent = ''; }, 8000);
+  });
 });
 const servicePreviews = {
   language: ['Language preparation', 'A preview of future study support, not an available course.', ['Set a Korean-language goal for your study plans.', 'Explore writing practice and preparation resources.', 'Course enrollment is not available.']],
@@ -368,7 +376,7 @@ document.addEventListener('click', event => {
   if (event.target.closest('[data-cancel-reset]')) resetDialog.close();
   if (event.target.closest('[data-confirm-reset]')) {
     state = defaultState(); selectedApplication = state.applications[0].id; clearErrors(); fillProfile();
-    document.getElementById('profile-save-status').textContent = '';
+    clearTimeout(profileStatusTimer); profileStatus.textContent = '';
     const persisted = save(); resetDialog.close(); renderAll(); location.hash = '#dashboard';
     announce(persisted ? 'Demo reset. Sara’s original profile, matches, case, documents, and tasks have been restored.' : 'Demo reset for this page. Browser storage is unavailable.');
   }
@@ -393,6 +401,10 @@ window.addEventListener('storage', event => {
   if (parseRoute().name === 'opportunity' || parseRoute().name === 'applications') currentRoute = '';
   renderAll(); route(); announce('Demo state changed in another tab. Profile fields remain an unsaved draft until you save or reload.');
 });
-const profileStatus = node('p', 'small'); profileStatus.id = 'profile-save-status';
-form.querySelector('.profile-actions').append(profileStatus);
+let profileStatusTimer;
+const profileStatus = node('p', 'status-message profile-save-status'); profileStatus.id = 'profile-save-status';
+profileStatus.setAttribute('role', 'status');
+profileStatus.setAttribute('aria-live', 'polite');
+profileStatus.setAttribute('aria-atomic', 'true');
+form.querySelector('.profile-actions > p').before(profileStatus);
 save(); fillProfile(); route(); if (startupNotice) announce(startupNotice);

@@ -761,3 +761,4 @@ progress::-moz-progress-bar { background: #16806f; border-radius: 20px; }
   .document-list li > .check-control { flex-basis: 65%; }
 }
 .detail-summary > div > .primary { margin-top: 16px; }
+.profile-actions .profile-save-status { margin: 0; font-size: 14px; }
