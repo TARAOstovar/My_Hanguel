@@ -330,6 +330,7 @@ form.addEventListener('submit', event => {
   event.preventDefault(); clearErrors();
   clearTimeout(profileStatusTimer);
   profileStatus.textContent = '';
+  profileSaveButton.textContent = 'Save Profile & Update Matches';
   const { profile, errors } = profileValidation(Object.fromEntries(new FormData(form)));
   if (Object.keys(errors).length) {
     for (const [key, text] of Object.entries(errors)) {
@@ -341,13 +342,18 @@ form.addEventListener('submit', event => {
   }
   state.profile = profile;
   const persisted = save(); fillProfile(); renderAll();
-  const message = persisted ? 'Profile saved. Your matches have been updated.' : 'Profile updated for this page only. Browser storage is unavailable.';
   // Announce once, beside the action; the global status is above this long form.
   document.getElementById('app-status').textContent = '';
   requestAnimationFrame(() => {
-    profileStatus.textContent = message;
+    if (persisted) {
+      profileStatus.replaceChildren(node('strong', '', '✓ Profile saved'), node('span', '', 'Your matches have been updated.'));
+      profileSaveButton.textContent = '✓ Profile Saved';
+    } else profileStatus.textContent = 'Profile updated for this page only. Browser storage is unavailable.';
     profileStatus.scrollIntoView({ block: 'nearest', behavior: 'instant' });
-    if (persisted) profileStatusTimer = setTimeout(() => { profileStatus.textContent = ''; }, 8000);
+    if (persisted) profileStatusTimer = setTimeout(() => {
+      profileStatus.textContent = '';
+      profileSaveButton.textContent = 'Save Profile & Update Matches';
+    }, 8000);
   });
 });
 const servicePreviews = {
@@ -377,6 +383,7 @@ document.addEventListener('click', event => {
   if (event.target.closest('[data-confirm-reset]')) {
     state = defaultState(); selectedApplication = state.applications[0].id; clearErrors(); fillProfile();
     clearTimeout(profileStatusTimer); profileStatus.textContent = '';
+    profileSaveButton.textContent = 'Save Profile & Update Matches';
     const persisted = save(); resetDialog.close(); renderAll(); location.hash = '#dashboard';
     announce(persisted ? 'Demo reset. Sara’s original profile, matches, case, documents, and tasks have been restored.' : 'Demo reset for this page. Browser storage is unavailable.');
   }
@@ -402,9 +409,12 @@ window.addEventListener('storage', event => {
   renderAll(); route(); announce('Demo state changed in another tab. Profile fields remain an unsaved draft until you save or reload.');
 });
 let profileStatusTimer;
-const profileStatus = node('p', 'status-message profile-save-status'); profileStatus.id = 'profile-save-status';
+const profileSaveButton = form.querySelector('button[type="submit"]');
+const profileSaveAction = node('div', 'profile-save-action');
+profileSaveButton.before(profileSaveAction);
+const profileStatus = node('p', 'profile-save-status'); profileStatus.id = 'profile-save-status';
 profileStatus.setAttribute('role', 'status');
 profileStatus.setAttribute('aria-live', 'polite');
 profileStatus.setAttribute('aria-atomic', 'true');
-form.querySelector('.profile-actions > p').before(profileStatus);
+profileSaveAction.append(profileSaveButton, profileStatus);
 save(); fillProfile(); route(); if (startupNotice) announce(startupNotice);
